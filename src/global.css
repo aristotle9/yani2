@@ -1,0 +1,26 @@
+/* CSS file */
+
+
+global
+{
+    backgroundColor: #FFFFFF;
+    fontFamily: Consolas;
+    fontSize: 12;
+    focus-thickness: 0;
+}
+TextArea
+{
+    Color: #300A24;
+    backgroundColor: #FFFFFF;
+}
+Button
+{
+    color: #201A24;
+    fillAlphas: 1.0, 1.0;
+    fillColors: #4F095E, #D775EC;
+    fontStyle: normal;
+    fontWeight: bold;
+    textAlign: center;
+    textDecoration: none;
+}
+    

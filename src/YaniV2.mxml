@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+                creationComplete="application1_creationCompleteHandler(event)"
+                width="600" height="600" creationPolicy="all">
+    <mx:Style source="global.css"/>
+    <mx:Script>
+        <![CDATA[
+            import com.maccherone.json.JSON;
+            
+            import mx.events.FlexEvent;
+            
+            import org.lala.niwan.interpreter.Evaluator;
+            import org.lala.niwan.interpreter.adapters.TheDrawShapeFunction;
+            
+            protected var ev:Evaluator = new Evaluator;
+            protected function application1_creationCompleteHandler(event:FlexEvent):void
+            {
+                var g:Graphics = cav.graphics;
+                var drawShape:TheDrawShapeFunction = new TheDrawShapeFunction(cav);
+                
+                ev.globalObject['log'] = log;
+//                ev.globalObject['cav'] = cav;
+                ev.globalObject['G'] = g;
+                ev.globalObject['drawShape'] = drawShape;
+//                ev.globalObject['ds'] = drawShape;
+            }
+            
+            protected function evalBt_clickHandler(event:MouseEvent):void
+            {
+                try
+                {
+                    var codes:Array = ev.genCodes(srcText.text);
+                    
+                    log("====<*>====");
+                    try
+                    {
+                        var result:* = ev.evalCodes(codes);
+                        
+                        log("result:");
+                        log(JSON.encode(result, true));
+                    }
+                    catch(e:Error){log(e.toString());}
+                }
+                catch(e:Error){log(e.toString());}
+                
+            }
+            
+            protected function log(...args):void
+            {
+                logText.text += args.join(" ") + "\n";
+                logText.validateNow();
+                logText.verticalScrollPosition = logText.maxVerticalScrollPosition;
+            }
+
+            protected function dumpBt_clickHandler(event:MouseEvent):void
+            {
+                try
+                {
+                    var codes:Array = ev.genCodes(srcText.text);
+                    
+                    log("====<code>====");
+                    codes = codes.map(function(a:Array,i:uint,...args):Array
+                    {
+                        a.unshift(i + '#');
+                        return a
+                    });
+                    log(JSON.encode(codes, true));
+                    log("====</code>====");
+                }
+                catch(e:Error){log(e.toString());}
+            }
+
+            protected function cleanBt_clickHandler(event:MouseEvent):void
+            {
+                logText.text = '';
+                cav.graphics.clear();
+                while(cav.numChildren)
+                {
+                    cav.removeChild(cav.getChildAt(0));
+                }                    
+            }
+/*======================
+/
+r=(\Math.floor(Math.random()*@0));
+randColor=(\r(255)<<16 | r(255) << 8 | r(255));
+f=(\g.lineStyle(2,randColor());g.beginFill(randColor());g.drawRect(@0*30,@1*30,30,30);g.endFill());
+100.times(\f(r(20),r(10)))
+======================*/
+        ]]>
+    </mx:Script>
+    <!-- YaniEngineTest -->
+    <mx:VDividedBox width="100%" height="100%">
+        <mx:TabNavigator height="100%" width="100%" paddingTop="0">
+            <mx:Canvas label="log" width="100%" height="100%">
+                <mx:TextArea id="logText" width="100%" height="100%" />
+            </mx:Canvas>
+            <mx:Canvas label="canvas" width="100%" height="100%" backgroundColor="#FFFFFF" backgroundAlpha="0.0">
+                <mx:UIComponent id="cav" top="0" bottom="0" left="0" right="0" />
+            </mx:Canvas>
+        </mx:TabNavigator>
+        <mx:VBox height="200" width="100%">
+            <mx:HBox width="100%" height="25" horizontalAlign="center" verticalAlign="middle">
+                <mx:Button id="evalBt" label="EVAL" click="evalBt_clickHandler(event)" height="20"/>
+                <mx:Button id="dumpBt" label="pCODE" click="dumpBt_clickHandler(event)" height="20"/>
+                <mx:Button id="cleanBt" label="clean" click="cleanBt_clickHandler(event)" height="20"/>
+            </mx:HBox>
+            <mx:TextArea id="srcText" width="100%" height="100%"/>
+        </mx:VBox>
+    </mx:VDividedBox>
+    <mx:LinkButton label="YANI v2, aristotle9 All Rights Reserved." x="0" y="0" right="0" toggle="true"/>
+</mx:Application>

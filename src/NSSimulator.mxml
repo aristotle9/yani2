@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" width="1000" height="500" creationComplete="application1_creationCompleteHandler(event)">
+    <mx:Script>
+        <![CDATA[
+            import com.maccherone.json.JSON;
+            
+            import mx.events.FlexEvent;
+            
+            import org.lala.niwan.ast.Node;
+            import org.lala.niwan.compiler.CodeGenerator;
+            import org.lala.niwan.interpreter.Evaluator;
+            import org.lala.niwan.parser.Lexer;
+            import org.lala.niwan.parser.Parser;
+            import org.lala.utils.NicoParser;
+
+            [Bindable]private var listdata:Array;
+            protected function application1_creationCompleteHandler(event:FlexEvent):void
+            {
+                var url:String = "D:\\niconico\\nm14824437 - 【6人合作】投コメPV詰め合わせⅡ【第10回CA祭】[Owner].xml";
+                var loader:URLLoader = new URLLoader();
+                var req:URLRequest = new URLRequest(url);
+                function complete(event:Event):void
+                {
+                    listdata = NicoParser.parse(XML(loader.data));
+                    listdata.sortOn(['stime','id'], [Array.NUMERIC, Array.NUMERIC]);
+                    //编译测试
+                    var ev:Evaluator = new Evaluator;
+                    for each(var item:Object in listdata)
+                    {
+                        try
+                        {
+                            var codes:Array = ev.genCodes(item.text)
+                        }
+                        catch(error:Error)
+                        {
+                            trace(error);
+                            trace(item.text);
+                            trace('');
+                        }
+                    }
+                }
+                loader.addEventListener(Event.COMPLETE, complete);
+                loader.load(req);
+                
+            }
+
+        ]]>
+    </mx:Script>
+    <mx:Canvas id="canvas" width="500" height="450" backgroundAlpha="1.0" backgroundColor="#000000"/>
+    <mx:VBox width="100%" height="100%">
+    <mx:DataGrid id="grid" width="100%" height="100%" dataProvider="{listdata}">
+        <mx:columns>
+            <mx:DataGridColumn dataField="stime" headerText="时间"/>
+            <mx:DataGridColumn dataField="text" headerText="文本"/>
+            <mx:DataGridColumn dataField="color" headerText="颜色"/>
+            <mx:DataGridColumn dataField="mode" headerText="模式"/>
+            <mx:DataGridColumn dataField="id" headerText="序号"/>
+        </mx:columns>
+    </mx:DataGrid>
+    <mx:HSlider id="timer" width="100%" />
+    </mx:VBox>
+</mx:Application>
