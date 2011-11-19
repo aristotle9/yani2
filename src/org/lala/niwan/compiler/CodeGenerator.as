@@ -558,7 +558,9 @@ package org.lala.niwan.compiler
                 else//略过参数
                 {
                     put('pushdefault');
-                    put('pushdefault');
+                    //null
+                    put('exprs', pos + 2, pos + 2);
+                    put('pushnull');
                 }
                 i ++;
             }
