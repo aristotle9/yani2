@@ -19,11 +19,11 @@ package org.lala.niwan.interpreter.prototypes
                 {
                     if(vm.scope.self as Boolean)
                     {
-                        return (params['then'] as Exprs).eval(vm);
+                        return params['then'] == null ? null : (params['then'] as Exprs).eval(vm);
                     }
                     else
                     {
-                        return (params['else'] as Exprs).eval(vm);
+                        return params['else'] == null ? null : (params['else'] as Exprs).eval(vm);
                     }
                 });
             this._alter.pushArgs(['then', null]);
