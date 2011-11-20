@@ -13,15 +13,16 @@ package org.lala.niwan.interpreter.runtime
         {
             var params:Object = {};
             
+            var k:uint = 0;
             paramsArray.forEach(function(a:Array, i:uint, ...args):void
             {
                 if(a[0] != null)
                 {
-                    params[a[0]] = (a[1] as Exprs).eval(vm);
+                    params['@' + a[0]] = (a[1] as Exprs).eval(vm);
                 }
                 else
                 {
-                    params['@' + i] = (a[1] as Exprs).eval(vm);
+                    params['@' + (k++)] = (a[1] as Exprs).eval(vm);
                 }
             });
             

@@ -19,11 +19,12 @@ package org.lala.niwan.interpreter.runtime
                 names[i] = itm.name;
             });
             
+            var k:uint = 0;
             paramsArray.forEach(function(a:Array, i:uint, ...args):void
             {
                 if(a[0] == null)
                 {
-                    params[names[i]] = a[1];
+                    params[names[k ++]] = a[1];
                 }
                 else if(a[0] != ArgItem.DEFAULT)
                 {

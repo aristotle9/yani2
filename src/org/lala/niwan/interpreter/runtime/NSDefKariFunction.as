@@ -13,6 +13,7 @@ package org.lala.niwan.interpreter.runtime
         {
             var params:Object = {};
 
+            var k:uint = 0;
             paramsArray.forEach(function(a:Array, i:uint, ...args):void
             {
                 if(a[0] != null)
@@ -21,7 +22,7 @@ package org.lala.niwan.interpreter.runtime
                 }
                 else
                 {
-                    params['$' + (i + 1)] = (a[1] as Exprs).eval(vm);
+                    params['$' + ((k++) + 1)] = (a[1] as Exprs).eval(vm);
                 }
             });
             
