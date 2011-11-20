@@ -18,7 +18,14 @@ package org.lala.niwan.interpreter.runtime
             {
                 if(a[0] != null)
                 {
-                    params['@' + a[0]] = (a[1] as Exprs).eval(vm);
+                    if((a[0] as String).charAt() !== '$')
+                    {
+                        params['@' + a[0]] = (a[1] as Exprs).eval(vm);
+                    }
+                    else
+                    {
+                        params[a[0]] = (a[1] as Exprs).eval(vm);
+                    }
                 }
                 else
                 {
