@@ -602,8 +602,18 @@ package org.lala.niwan.interpreter
                     var old_self:*;
                     old_self = this.scope.self;
                     this.scope.self = obj;
-                    res = (func as INSFunction).apply(this, args);
-                    this.scope.self = old_self;
+                    try
+                    {
+                        res = (func as INSFunction).apply(this, args);
+                    }
+                    catch(e:Error)
+                    {
+                        throw e;
+                    }
+                    finally
+                    {
+                        this.scope.self = old_self;//出错时self恢复
+                    }
                 }
                 else
                 {
