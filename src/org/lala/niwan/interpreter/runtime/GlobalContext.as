@@ -2,7 +2,11 @@ package org.lala.niwan.interpreter.runtime
 {
     import org.lala.niwan.interpreter.VirtualMathine;
     import org.lala.niwan.interpreter.interfaces.IContext;
+    import org.lala.niwan.interpreter.prototypes.NSArray;
+    import org.lala.niwan.interpreter.prototypes.NSBoolean;
     import org.lala.niwan.interpreter.prototypes.NSNumber;
+    import org.lala.niwan.interpreter.prototypes.NSObject;
+    import org.lala.niwan.interpreter.prototypes.TheDotDefFunction;
     
     public class GlobalContext extends Context
     {
@@ -98,9 +102,16 @@ package org.lala.niwan.interpreter.runtime
                 'while_kari':while_kari,
                 'while':while_kari,
                 'def_kari':def_kari,
-                'def':def_kari,
                 '@':_at
             };
+            obj['def'] = new TheDotDefFunction(obj);
+            
+            //原型
+            obj['Object'] = NSObject.getInstance();
+            obj['Number'] = NSNumber.getInstance();
+            obj['Array'] = NSArray.getInstacne();
+            obj['Boolean'] = NSBoolean.getInstance();
+            
             super(obj, null);
         }
         

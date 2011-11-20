@@ -2,6 +2,7 @@ package org.lala.niwan.interpreter
 {
     import org.lala.niwan.interpreter.interfaces.IContext;
     import org.lala.niwan.interpreter.interfaces.INSFunction;
+    import org.lala.niwan.interpreter.interfaces.IProto;
     import org.lala.niwan.interpreter.prototypes.NSArray;
     import org.lala.niwan.interpreter.prototypes.NSBoolean;
     import org.lala.niwan.interpreter.prototypes.NSNumber;
@@ -11,6 +12,7 @@ package org.lala.niwan.interpreter
     import org.lala.niwan.interpreter.runtime.Exprs;
     import org.lala.niwan.interpreter.runtime.GlobalContext;
     import org.lala.niwan.interpreter.runtime.NSLambdaFunction;
+    import org.lala.niwan.interpreter.runtime.NSUnitFunction;
 
     public class VirtualMathine
     {
@@ -415,7 +417,13 @@ package org.lala.niwan.interpreter
         
         private function OP_loadV(code:Array):void
         {
-            _stack.push(_scope.getV(code[1]));
+            var res:* = _scope.getV(code[1]);
+            //对于立即函数进行一次计算
+            if(res is NSUnitFunction)
+            {
+                res = (res as NSUnitFunction).apply(this, null);
+            }
+            _stack.push(res);
             _pc ++;
         }
         
@@ -427,14 +435,44 @@ package org.lala.niwan.interpreter
         {
             var obj:* = _stack.pop();
             var res:*;
+            var proto:Object = null;
+            var attri:String = code[1];
+            
             //涉及原型的求值
-            if(typeof obj == 'number' && NSNumber.getInstance().hasSlot(NSNumber.getInstance(), code[1]))
+            if(typeof obj == 'number' && NSNumber.getInstance().hasSlot(NSNumber.getInstance(), attri))
             {
-                res = NSNumber.getInstance().__send(obj, code[1]);
+                proto = NSNumber.getInstance();
             }
-            else if(obj is Array && NSArray.getInstacne().hasSlot(NSArray.getInstacne(), code[1]))
+            else if(obj is Array && NSArray.getInstacne().hasSlot(NSArray.getInstacne(), attri))
             {
-                res = NSArray.getInstacne().__send(obj, code[1]);
+                proto = NSArray.getInstacne();
+            }
+            else if(typeof obj == 'boolean' && NSBoolean.getInstance().hasSlot(NSBoolean.getInstance(), attri))
+            {
+                proto = NSBoolean.getInstance();
+            }
+            else if(NSObject.getInstance().hasSlot(NSObject.getInstance(), attri))//原型属性总是优先的
+            {
+                proto = NSObject.getInstance();
+            }
+            
+            if(proto !== null)
+            {
+                //不必特意求值,__send方法包含的apply足可以对NSUnitFunction求值
+                var old_self:* = this.scope.self;
+                this.scope.self = obj;
+                try
+                {
+                    res = proto.__send(obj, attri);
+                }
+                catch(e:Error)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    this.scope.self = old_self;
+                }
             }
             else
             {
@@ -581,22 +619,28 @@ package org.lala.niwan.interpreter
             args.reverse();
             
             var res:*;
+            var proto:Object = null;
             
             if(typeof obj == 'number' && NSNumber.getInstance().hasSlot(NSNumber.getInstance(), attri))
             {
-                res = NSNumber.getInstance().__send(obj, attri, args_filter(args));
+                proto = NSNumber.getInstance();
             }
             else if(obj is Array && NSArray.getInstacne().hasSlot(NSArray.getInstacne(), attri))
             {
-                res = NSArray.getInstacne().__send(obj, attri, args_filter(args));
-            }
-            else if(typeof obj == 'object' && NSObject.getInstance().hasSlot(NSObject.getInstance(), attri))//原型属性总是优先的
-            {
-                res = NSObject.getInstance().__send(obj, attri, args_filter(args));
+                proto = NSArray.getInstacne();
             }
             else if(typeof obj == 'boolean' && NSBoolean.getInstance().hasSlot(NSBoolean.getInstance(), attri))
             {
-                var func:* = NSBoolean.getInstance()[attri];
+                proto = NSBoolean.getInstance();
+            }
+            else if(NSObject.getInstance().hasSlot(NSObject.getInstance(), attri))//原型属性总是优先的
+            {
+                proto = NSObject.getInstance();
+            }
+            
+            if(proto !== null)
+            {
+                var func:* = proto[attri];
                 if(func is INSFunction)
                 {
                     var old_self:*;
@@ -617,7 +661,7 @@ package org.lala.niwan.interpreter
                 }
                 else
                 {
-                    res = func.apply(obj, args_filter(args));
+                    res = proto.__send(obj, attri, args_filter(args)); 
                 }
             }
             else
