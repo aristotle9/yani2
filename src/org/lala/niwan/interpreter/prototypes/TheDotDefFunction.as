@@ -72,28 +72,65 @@ package org.lala.niwan.interpreter.prototypes
                 }
                 //["b","c"]
                 //定义函数体
-                func_body = new NSNormalFunction('.' + func_name,
-                    function(params:Object):*
-                    {
-                        if(!params.hasOwnProperty('self'))
+                if(lazy)//如果是lazy,则可以操作结点.但是为了可移植性与以后的兼容
+                    //性,不建议大量使用
+                {
+                    func_body = new NSNodeFunction('.' + func_name + '_lazy',
+                        function(vm:VirtualMathine, params:Object):*
                         {
-                            params['self'] = vm.scope.self;
-                        }
-                        var ctx:IContext = vm.scope.newContext(params);
-                        vm.pushScope(ctx);
-                        try
+                            if(!params.hasOwnProperty('self'))
+                            {
+                                params['self'] = vm.scope.self;
+                            }
+                            if(!params.hasOwnProperty('_scope'))
+                            {
+                                params['_scope'] = vm.scope;
+                            }
+                            if(!params.hasOwnProperty('_vm'))
+                            {
+                                params['_vm'] = vm;
+                            }
+                            var ctx:IContext = vm.scope.newContext(params);
+                            vm.pushScope(ctx);
+                            try
+                            {
+                                return scriptExp.eval(vm);
+                            }
+                            catch(e:Error)
+                            {
+                                throw e;
+                            }
+                            finally
+                            {
+                                vm.popScope();
+                            }
+                        });
+                }
+                else
+                {
+                    func_body = new NSNormalFunction('.' + func_name,
+                        function(params:Object):*
                         {
-                            return scriptExp.eval(vm);
-                        }
-                        catch(e:Error)
-                        {
-                            throw e;
-                        }
-                        finally
-                        {
-                            vm.popScope();
-                        }
-                    });
+                            if(!params.hasOwnProperty('self'))
+                            {
+                                params['self'] = vm.scope.self;
+                            }
+                            var ctx:IContext = vm.scope.newContext(params);
+                            vm.pushScope(ctx);
+                            try
+                            {
+                                return scriptExp.eval(vm);
+                            }
+                            catch(e:Error)
+                            {
+                                throw e;
+                            }
+                            finally
+                            {
+                                vm.popScope();
+                            }
+                        });
+                }
                 //压入参数表
                 arg_name.forEach(function(name:String,...args):void
                 {
