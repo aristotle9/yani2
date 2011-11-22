@@ -96,6 +96,13 @@ a.fold(i:i+1, @1($1:@0, $2:a[i]), @1)
 ));
 
 [1,2,3,4,5,6,7,8,9,10].fold(0,\$1+$2*$2)
+            
+/def(for(initial,condition,after,body),lazy:true,
+initial.eval();
+while_kari(condition.eval(),body.eval();after.eval()));
+
+for(i:=0,i<10,i++,
+log(i));
 ======================*/
         ]]>
     </mx:Script>
