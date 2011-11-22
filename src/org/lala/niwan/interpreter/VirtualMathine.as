@@ -540,7 +540,7 @@ package org.lala.niwan.interpreter
         **/
         private function OP_exprs(code:Array):void
         {
-            _stack.push(new Exprs(_codes, code[1], code[2]));
+            _stack.push(new Exprs(_codes, code[1], code[2], this));
             _pc = code[2] + 1;
         }
         
