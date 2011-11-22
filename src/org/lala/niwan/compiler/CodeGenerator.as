@@ -161,12 +161,11 @@ package org.lala.niwan.compiler
         public function GEN_logical(tree:Node):void
         {
             gen_code(tree.nodes[0])//a
-            put('convert_b')//a
-            put('dup')// a a
-            var lb:uint = put('label');//a a
+            put('dup')//a a
+            put('convert_b')//a B(a)
+            var lb:uint = put('label');//a B(a)
             put('pop')
-            gen_code(tree.nodes[1])
-            put('convert_b')
+            gen_code(tree.nodes[1])// b
             switch(tree.attri)
             {
                 case '||':
