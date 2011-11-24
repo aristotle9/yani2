@@ -49,5 +49,20 @@ package org.lala.niwan.interpreter.prototypes
         {
             return _alter;   
         }
+        
+        public function and(self:Boolean, rhs:Boolean):Boolean
+        {
+            return self && rhs;
+        }
+        
+        public function or(self:Boolean, rhs:Boolean):Boolean
+        {
+            return self || rhs;
+        }
+        
+        public function not(self:Boolean):Boolean
+        {
+            return !self;
+        }
     }
 }
