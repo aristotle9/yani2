@@ -94,6 +94,27 @@ package org.lala.niwan.interpreter.runtime
                 });
             });
             
+            var rand:Function = function(obj:*):Object
+            {
+                if(obj is String)
+                {
+                    var str:String = obj as String;
+                    return str.charAt(Math.floor(Math.random() * str.length));
+                }
+                else
+                {
+                    if((Number(obj) - Math.floor(Number(obj))) == 0)
+                        return Math.floor(Math.random() * Number(obj));
+                    else
+                        return Math.random() * Number(obj);
+                }
+            };
+              
+            var distance:Function = function(x1:Number, y1:Number, x2:Number, y2:Number):Number
+            {
+                return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+            };
+            
             var obj:Object = {
                 'trace':function(str:*):void{trace(str);},
                 'Math':Math,
@@ -102,6 +123,8 @@ package org.lala.niwan.interpreter.runtime
                 'while_kari':while_kari,
                 'while':while_kari,
                 'def_kari':def_kari,
+                'rand':rand,
+                'distance':distance,
                 '@':_at
             };
             obj['def'] = new TheDotDefFunction(obj);
