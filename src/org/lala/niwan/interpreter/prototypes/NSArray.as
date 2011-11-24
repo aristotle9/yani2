@@ -26,9 +26,38 @@ package org.lala.niwan.interpreter.prototypes
             return self.length;
         }
         
-        public function index(self:Array, i:uint):*
+        public function index(self:Array, i:int):*
         {
-            return self[i];
+            if(i >= 0 && i < self.length)
+                return self[i];
+            else
+                return null;
+        }
+        
+        public function sort(self:Array):Array
+        {
+            self.sort();
+            return self;
+        }
+        
+        public function sum(self:Array):*
+        {
+            var res:Number = 0;
+            self.forEach(function(a:*, ...args):void
+            {
+                res += a;
+            });
+            return res;
+        }
+        
+        public function product(self:Array):Number
+        {
+            var res:Number = 1;
+            self.forEach(function(a:*, ...args):void
+            {
+                res *= Number(a);
+            });
+            return res;
         }
         
         public function map(self:Array, func:NSLambdaFunction):Array
