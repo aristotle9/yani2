@@ -32,7 +32,7 @@ package org.lala.niwan.interpreter.prototypes
         
         override public function get proto():IProto
         {
-            return NSBoolean.getInstance();
+            return NSObject.getInstance();
         }
         
         public static function getInstance():NSBoolean
