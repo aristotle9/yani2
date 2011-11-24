@@ -11,7 +11,7 @@ package org.lala.niwan.interpreter.prototypes
             super();
         }
         
-        public static function getInstacne():NSString
+        public static function getInstance():NSString
         {
             return _instance;
         }

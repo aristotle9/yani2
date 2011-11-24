@@ -109,7 +109,7 @@ package org.lala.niwan.interpreter.runtime
             //原型
             obj['Object'] = NSObject.getInstance();
             obj['Number'] = NSNumber.getInstance();
-            obj['Array'] = NSArray.getInstacne();
+            obj['Array'] = NSArray.getInstance();
             obj['Boolean'] = NSBoolean.getInstance();
             
             super(obj, null);

@@ -444,13 +444,13 @@ package org.lala.niwan.interpreter
             {
                 proto = NSNumber.getInstance();
             }
-            else if(obj is Array && NSArray.getInstacne().hasSlot(NSArray.getInstacne(), attri))
+            else if(obj is Array && NSArray.getInstance().hasSlot(NSArray.getInstance(), attri))
             {
-                proto = NSArray.getInstacne();
+                proto = NSArray.getInstance();
             }
-            else if(obj is String && NSString.getInstacne().hasSlot(NSString.getInstacne(), attri))
+            else if(obj is String && NSString.getInstance().hasSlot(NSString.getInstance(), attri))
             {
-                proto = NSString.getInstacne();
+                proto = NSString.getInstance();
             }
             else if(typeof obj == 'boolean' && NSBoolean.getInstance().hasSlot(NSBoolean.getInstance(), attri))
             {
@@ -520,7 +520,7 @@ package org.lala.niwan.interpreter
             }
             else if(obj is String)
             {
-                _stack.push(NSString.getInstacne().index(obj, index[0]));
+                _stack.push(NSString.getInstance().index(obj, index[0]));
             }
             else
             {//至于使用多个下标来索引一个一维数组的校验就暂时不做了,该行为以后再定义
@@ -634,13 +634,13 @@ package org.lala.niwan.interpreter
             {
                 proto = NSNumber.getInstance();
             }
-            else if(obj is Array && NSArray.getInstacne().hasSlot(NSArray.getInstacne(), attri))
+            else if(obj is Array && NSArray.getInstance().hasSlot(NSArray.getInstance(), attri))
             {
-                proto = NSArray.getInstacne();
+                proto = NSArray.getInstance();
             }
-            else if(obj is String && NSString.getInstacne().hasSlot(NSString.getInstacne(), attri))
+            else if(obj is String && NSString.getInstance().hasSlot(NSString.getInstance(), attri))
             {
-                proto = NSString.getInstacne();
+                proto = NSString.getInstance();
             }
             else if(typeof obj == 'boolean' && NSBoolean.getInstance().hasSlot(NSBoolean.getInstance(), attri))
             {
