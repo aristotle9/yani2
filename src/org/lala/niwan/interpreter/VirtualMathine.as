@@ -7,6 +7,7 @@ package org.lala.niwan.interpreter
     import org.lala.niwan.interpreter.prototypes.NSBoolean;
     import org.lala.niwan.interpreter.prototypes.NSNumber;
     import org.lala.niwan.interpreter.prototypes.NSObject;
+    import org.lala.niwan.interpreter.prototypes.NSString;
     import org.lala.niwan.interpreter.runtime.ArgItem;
     import org.lala.niwan.interpreter.runtime.Context;
     import org.lala.niwan.interpreter.runtime.Exprs;
@@ -447,6 +448,10 @@ package org.lala.niwan.interpreter
             {
                 proto = NSArray.getInstacne();
             }
+            else if(obj is String && NSString.getInstacne().hasSlot(NSString.getInstacne(), attri))
+            {
+                proto = NSString.getInstacne();
+            }
             else if(typeof obj == 'boolean' && NSBoolean.getInstance().hasSlot(NSBoolean.getInstance(), attri))
             {
                 proto = NSBoolean.getInstance();
@@ -512,6 +517,10 @@ package org.lala.niwan.interpreter
                     params['@' + i] = item;
                 });
                 _stack.push(obj.call(params));
+            }
+            else if(obj is String)
+            {
+                _stack.push(NSString.getInstacne().index(obj, index[0]));
             }
             else
             {//至于使用多个下标来索引一个一维数组的校验就暂时不做了,该行为以后再定义
@@ -628,6 +637,10 @@ package org.lala.niwan.interpreter
             else if(obj is Array && NSArray.getInstacne().hasSlot(NSArray.getInstacne(), attri))
             {
                 proto = NSArray.getInstacne();
+            }
+            else if(obj is String && NSString.getInstacne().hasSlot(NSString.getInstacne(), attri))
+            {
+                proto = NSString.getInstacne();
             }
             else if(typeof obj == 'boolean' && NSBoolean.getInstance().hasSlot(NSBoolean.getInstance(), attri))
             {
