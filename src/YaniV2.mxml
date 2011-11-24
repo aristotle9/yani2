@@ -11,18 +11,21 @@
             
             import org.lala.niwan.interpreter.Evaluator;
             import org.lala.niwan.interpreter.adapters.TheDrawShapeFunction;
+            import org.lala.niwan.interpreter.adapters.TheTimerFunction;
             
             protected var ev:Evaluator = new Evaluator;
             protected function application1_creationCompleteHandler(event:FlexEvent):void
             {
                 var g:Graphics = cav.graphics;
                 var drawShape:TheDrawShapeFunction = new TheDrawShapeFunction(cav);
+                var timer:TheTimerFunction = new TheTimerFunction();
                 
                 ev.globalObject['log'] = log;
 //                ev.globalObject['cav'] = cav;
                 ev.globalObject['G'] = g;
                 ev.globalObject['drawShape'] = drawShape;
 //                ev.globalObject['ds'] = drawShape;
+                ev.globalObject['timer'] = timer;
             }
             
             protected function evalBt_clickHandler(event:MouseEvent):void
