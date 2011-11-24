@@ -1,5 +1,7 @@
 package org.lala.niwan.interpreter.prototypes
 {
+    import flash.utils.ByteArray;
+    
     import org.lala.niwan.interpreter.interfaces.INSFunction;
     import org.lala.niwan.interpreter.interfaces.IProto;
     import org.lala.niwan.interpreter.runtime.NSUnitFunction;
@@ -66,6 +68,19 @@ package org.lala.niwan.interpreter.prototypes
         public function getSlot(self:*, attri:String):*
         {
             return self[attri];
+        }
+        
+        public function setSlot(self:*, attri:String, value:*):*
+        {
+            return self[attri] = value;
+        }
+        
+        public function clone(self:*):*
+        {//对于绘图物件要重新定义,以后再完成
+            var ba:ByteArray = new ByteArray;
+            ba.writeObject(self);
+            ba.position = 0;
+            return ba.readObject();
         }
     }
 }
