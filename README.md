@@ -1,0 +1,1 @@
+YANI 2======ActionScript3.0 library of [NiwaScript language](http://nicowiki.com/%E3%83%8B%E3%83%AF%E3%83%B3%E8%AA%9E.html) engine, is licensed under the [New BSD License](http://www.opensource.org/licenses/bsd-license.php).
